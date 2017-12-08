@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head_title %}Welcome || {{ block.super }} {% endblock head_title %}
+
+{% block content %}
+<p>Display the template context variable: <code> {% verbatim %} {{ html_tag }} {% endverbatim %} </code> </p>
+<p>The random number is only display if the number is >= 500 </p>
+<p>
+    {% if bool %}
+        The random number of the day is: {{ num }}
+    {% endif %}
+</p>
+
+<p>
+    {% for some_rand_int in random_num_list %}
+        
+        {% if some_rand_int|divisibleby:"2" %}
+            Even number: 
+        {% else %}
+            Odd number:
+        {% endif %}
+
+        {{ some_rand_int }} <br/>
+
+    {% endfor %}
+</p>
+{% endblock content %}

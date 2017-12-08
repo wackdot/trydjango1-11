@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from restaurants.views import home
+from restaurants.views import home1, home2, home3, about, contact
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', home)
+    url(r'^$', home1),
+    url(r'^home2/$', home2),
+    url(r'^home3/$', home3),
+    url(r'^about/$', about),
+    url(r'^contact/$', contact)
 ]
