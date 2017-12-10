@@ -21,6 +21,7 @@ def restaurant_listview(request):
 
 
 class RestaurantListView(ListView):
+
     def get_queryset(self):
         #kwarg gets the user input from the url, it is called a slug
         slug = self.kwargs.get("slug") 
@@ -35,6 +36,9 @@ class RestaurantListView(ListView):
 
 
 class RestaurantDetailView(DetailView):
+
+    # Note: The available objects would be based on the queryset
+    # Therefore if there is prefilter, the filtered query would be used
     queryset = RestaurantLocation.objects.all()
 
     # def get_object(self, *args, **kwargs):
