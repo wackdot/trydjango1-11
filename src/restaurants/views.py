@@ -1,63 +1,45 @@
 import random
 
+from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
 
-# Create your views here.
-# function based view
-# def home1(request):
-#     num = random.randint(0, 1000)
+from .models import RestaurantLocation
 
-#     if (num < 500):
-#         value = False
-#     else:
-#         value = True
-    
-#     random_num_list = [
-#         random.randint(0, 1000), 
-#         random.randint(0, 1000), 
-#         random.randint(0, 1000)
-#         ]
+def restaurant_listview(request):
 
-#     context = {
-#         "html_tag": "Testing123", 
-#         "bool": value, 
-#         "num": num,
-#         "random_num_list": random_num_list
-#         }
+    template_name = 'restaurants/restaurants_list.html'
 
-#     return render(request, "home1.html", context) #response
+    queryset = RestaurantLocation.objects.all()
 
-# Class based view
-class HomeView(TemplateView):
-    template_name = "home.html"
+    context = {
+        "object_list": queryset
+    }
+    return render(request, template_name, context)
 
-    # Implementing existing class method
-    def get_context_data(self, *args, **kwargs):
 
-        context = super(HomeView, self).get_context_data(*args, **kwargs)
-        
-        num = random.randint(0, 1000)
-
-        if (num < 500):
-            value = False
+class RestaurantListView(ListView):
+    def get_queryset(self):
+        #kwarg gets the user input from the url, it is called a slug
+        slug = self.kwargs.get("slug") 
+        if slug:
+            queryset = RestaurantLocation.objects.filter(
+                Q(category__iexact=slug) |
+                Q(category__icontains=slug)
+            )
         else:
-            value = True
-        
-        random_num_list = [
-            random.randint(0, 1000), 
-            random.randint(0, 1000), 
-            random.randint(0, 1000)
-            ]
+            queryset = RestaurantLocation.objects.all()
+        return queryset
 
-        context = {
-            "html_tag": "Testing123", 
-            "bool": value, 
-            "num": num,
-            "random_num_list": random_num_list
-            }
 
-        return context
-        
+class RestaurantDetailView(DetailView):
+    queryset = RestaurantLocation.objects.all()
+
+    # def get_object(self, *args, **kwargs):
+    #     rest_id = self.kwargs.get('rest_id') #Ties the user keyword input (kwargs) to the variable rest_id
+    #     obj = get_object_or_404(RestaurantLocation, id=rest_id) # Return obj where (object's pk = rest_id)
+    #     return obj
+
+
