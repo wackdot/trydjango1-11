@@ -19,6 +19,7 @@ from django.views.generic import TemplateView
 
 from restaurants.views import (
     restaurant_listview,
+    restaurant_createview,
     RestaurantListView,
     RestaurantDetailView,
     RestaurantCreateView,
