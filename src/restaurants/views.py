@@ -1,12 +1,33 @@
 import random
 
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 
+from .forms import RestaurantCreateForm, RestaurantLocationCreateForm
 from .models import RestaurantLocation
+
+
+def restaurant_createview(request):
+
+    form = RestaurantLocationCreateForm(request.POST or None)
+    errors = None
+
+    if form.is_valid():
+        # customisation
+        # like a pre_save
+        form.save()
+        # like a post_save
+        return HttpResponseRedirect("/restaurants/")
+    
+    if form.errors:
+        errors = form.errors
+    
+    template_name = 'restaurants/form.html'
+    context = {"form": form, "errors":errors}
+    return render(request, template_name, context)
 
 def restaurant_listview(request):
 
@@ -47,3 +68,7 @@ class RestaurantDetailView(DetailView):
     #     return obj
 
 
+class RestaurantCreateView(CreateView):
+    form_class = RestaurantLocationCreateForm
+    template_name = "restaurants/form.html"
+    success_url = "/restaurants/"

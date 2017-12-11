@@ -7,6 +7,8 @@ random_string_generator is located here:
 http://joincfe.com/blog/random-string-generator-in-python/
 '''
 
+DONT_USE = ['create']
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -23,7 +25,8 @@ def unique_slug_generator(instance, new_slug=None):
 
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()
-    if qs_exists:
+
+    if slug in DONT_USE or qs_exists:
         new_slug = "{slug}-{randstr}".format(
                     slug=slug,
                     randstr=random_string_generator(size=4)
