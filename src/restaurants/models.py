@@ -9,7 +9,7 @@ User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class RestaurantLocation(models.Model):
-    owner           = models.ForeignKey(User)
+    owner           = models.ForeignKey(User) #Django Models Unleshed JOINCFE.com
     name            = models.CharField(max_length=120)
     location        = models.CharField(max_length=120, null=True, blank=True)
     category        = models.CharField(max_length=120, null=True, blank=True, validators=[validate_category])
