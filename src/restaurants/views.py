@@ -1,5 +1,7 @@
 import random
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -9,7 +11,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from .forms import RestaurantCreateForm, RestaurantLocationCreateForm
 from .models import RestaurantLocation
 
-
+@login_required(login_url='/login/')
 def restaurant_createview(request):
 
     form = RestaurantLocationCreateForm(request.POST or None)
@@ -73,9 +75,10 @@ class RestaurantDetailView(DetailView):
     #     return obj
 
 
-class RestaurantCreateView(CreateView):
+class RestaurantCreateView(LoginRequiredMixin, CreateView):
     form_class = RestaurantLocationCreateForm
     template_name = "restaurants/form.html"
+    login_url = '/login/' # overwrites default login 
     success_url = "/restaurants/"
 
     def form_valid(self, form):
