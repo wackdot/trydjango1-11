@@ -6,26 +6,29 @@
 <h1>{{ user.username }}</h1>
 
 <hr/>
-{% if user.item_set.all.exists %}
-{% for obj in user.restaurantlocation_set.all %}
-    <li><b>{{ obj.title }}</b> | {{ obj.location }} | {{ obj.category }}
-        <p>
-            <b>Items</b>
-            <ul>
-                {% for item in obj.item_set.all %}
-                    <li style='margin-bottom: 10px' > {{ item.name }} <br/> 
-                            {% for ing in item.get_contents %}
-                            <span style='padding: 2px 4px; margin-right:4px; background-color:#ccc;'> {{ ing }} </span>
-                            {% endfor %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </p>
-    </li>
-{% endfor %}
-
+{% if locations %}
+    {% for obj in locations %}
+    <div class='row'>
+        <div class='col-sm-12'>
+            <div class='thumbnail'> 
+                <h3>{{ obj.title }}</h3> 
+                <p>{{ obj.location }} | {{ obj.category }}</p>
+                <p>
+                    <ul>
+                        {% for item in obj.item_set.all %}
+                            <li style='margin-bottom: 10px'><b>{{ item.name }}</b><br/> 
+                                {{ item.contents }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </p>
+                <hr/>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% else %}
-<p class='lead'>No Items Found</p>
+    <p class='lead'>No Items Found</p>
 {% endif %}
 
 {% endblock %}
