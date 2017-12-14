@@ -4,20 +4,30 @@
 
 {% block content %}
 <h1>{{ user.username }}</h1>
-
 <hr/>
+
+<form class='form' method='GET' action='.'>
+    <input type='text' placeholder='Search...' name='q' value='{{ request.GET.q }}'> 
+    <button class='btn btn-default' type='submit'>Search</button>
+</form>
+
 {% if locations %}
     {% for obj in locations %}
     <div class='row'>
         <div class='col-sm-12'>
             <div class='thumbnail'> 
                 <h3>{{ obj.title }}</h3> 
-                <p>{{ obj.location }} | {{ obj.category }}</p>
+                <p>
+                    <a href='{{ request.path }}?q={{ obj.location }}'>{{ obj.location }}</a> | 
+                    <a href='{{ request.path }}?q={{ obj.category }}'>{{ obj.category }}</a>
+                </p>
                 <p>
                     <ul>
                         {% for item in obj.item_set.all %}
                             <li style='margin-bottom: 10px'><b>{{ item.name }}</b><br/> 
-                                {{ item.contents }}
+                                {% for ing in item.get_contents %}
+                                    <a href='{{ request.path }}?q={{ing}}'>{{ ing }}</a>
+                                {% endfor %}
                             </li>
                         {% endfor %}
                     </ul>
