@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
 
+from menus.views import HomeView
+from profiles.views import ProfileFollowToggle
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', HomeView.as_view(), name="home"),
     url(r'^login/$', LoginView.as_view(), name="login"),
+    url(r'^profile-follow/$', ProfileFollowToggle.as_view(), name="follow"),
     url(r'^u/', include('profiles.urls', namespace='profiles')),
-    url(r'^$', TemplateView.as_view(template_name="home.html"), name="home"),
     url(r'^restaurants/', include('restaurants.urls', namespace='restaurant')),
     url(r'^items/', include('menus.urls', namespace='menus')),
     url(r'^about/$', TemplateView.as_view(template_name="about.html"), name="about"),
