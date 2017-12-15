@@ -12,7 +12,7 @@ class HomeView(View):
         
         user = request.user
         is_following_user_ids = [x.user.id for x in user.is_following.all()] # Appending the users in user.is_following to x.user.id
-        qs = Item.objects.filter(user__id__in=is_following_user_ids, public=True).order_by("-update")[:3]
+        qs = Item.objects.filter(user__id__in=is_following_user_ids, public=True).order_by("-updated")[:3]
         return render(request, "menus/home-feed.html", {'object_list': qs})
 
 class ItemListView(LoginRequiredMixin, ListView):
